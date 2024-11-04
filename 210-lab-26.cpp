@@ -51,6 +51,7 @@ int main() {
             results[0][i] = duration.count();
             fin.close();
         }
+
         // Testing for SORT operations
         for (int i = 0; i < STRUCTURES; i++) {
             auto start = chrono::high_resolution_clock::now();
@@ -95,17 +96,12 @@ int main() {
                     break;
                 }
             }
-            case 2: {  // insert into a set
-                data_set.insert("TESTCODE");
-                auto end = chrono::high_resolution_clock::now();
-                auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
-                results[2][i] = duration.count();
-                break;
-            }
+            auto end = chrono::high_resolution_clock::now();
+            auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
+            results[2][i] = duration.count();
         }
-    }
 
-  // Testing for DELETE operations
+        // Testing for DELETE operations
         for (int i = 0; i < STRUCTURES; i++) {
             // Select a target value in the vector 
             int ind = data_vector.size() / 2;
@@ -155,7 +151,16 @@ int main() {
             cum_results[i][j] /= NUM_RUNS;
         }
     }
-    
 
+    // Output results
+    cout << "Number of simulations: " << NUM_RUNS << endl;
+    cout << setw(W1) << "Operation" << setw(W1) << "Vector" << setw(W1) << "List"
+         << setw(W1) << "Set" << endl;
+    for (int i = 0; i < ROWS; i++) {
+        cout << setw(W1) << labels[i];
+        for (int j = 0; j < COLS; j++) 
+            cout << setw(W1) << cum_results[i][j];
+        cout << endl;
+    }
     return 0;
 }
