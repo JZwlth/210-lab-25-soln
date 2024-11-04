@@ -15,69 +15,44 @@ const int ROWS = 4, COLS = 3;
 const int W1 = 10;
 
 int main() {
-    int results[ROWS][COLS];
-    string cd;
-    vector<string> data_vector;
-    list<string> data_list;
-    set<string> data_set;
+    long long cum_results[ROWS][COLS] = {0}; // Cumulative results over runs
+    string labels[] = {"Read", "Sort", "Insert", "Delete"};
 
-    // testing for READ operations
-    for (int i = 0; i < STRUCTURES; i++) {
-        ifstream fin("codes.txt");
-        auto start = chrono::high_resolution_clock::now();
-        switch(i) {
-            case 0: {  // read into a vector
-                while (fin >> cd)
+    for (int run = 0; run < NUM_RUNS; ++run) {
+        vector<string> data_vector;
+        list<string> data_list;
+        set<string> data_set;
+        long long results[ROWS][COLS] = {0}; // Results for this run
+
+        // Testing for READ operations
+        for (int i = 0; i < STRUCTURES; i++) {
+            ifstream fin("codes.txt");
+            string cd;
+            auto start = chrono::high_resolution_clock::now();
+            switch(i) {
+                case 0: {  // Read into a vector
+                    while (fin >> cd)
                         data_vector.push_back(cd);
-                auto end = chrono::high_resolution_clock::now();
-                auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
-                results[0][i] = duration.count();
-                break;
-            }
-            case 1: {  // read into a list
-                while (fin >> cd)
+                    break;
+                }
+                case 1: {  // Read into a list
+                    while (fin >> cd)
                         data_list.push_back(cd);
-                auto end = chrono::high_resolution_clock::now();
-                auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
-                results[0][i] = duration.count();
-                break;
-            }
-            case 2: {  // read into a set
-                while (fin >> cd)
+                    break;
+                }
+                case 2: {  // Read into a set
+                    while (fin >> cd)
                         data_set.insert(cd);
-                auto end = chrono::high_resolution_clock::now();
-                auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
-                results[0][i] = duration.count();
-                break;
+                    break;
+                }
             }
+            auto end = chrono::high_resolution_clock::now();
+            auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
+            results[0][i] = duration.count();
+            fin.close();
         }
-        fin.close();
-    }
 
-    // testing for SORT operations
-    for (int i = 0; i < STRUCTURES; i++) {
-        auto start = chrono::high_resolution_clock::now();
-        switch(i) {
-            case 0: {  // sort a vector
-                sort(data_vector.begin(), data_vector.end());
-                auto end = chrono::high_resolution_clock::now();
-                auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
-                results[1][i] = duration.count();
-                break;
-            }
-            case 1: {  // sort a list
-                data_list.sort();
-                auto end = chrono::high_resolution_clock::now();
-                auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
-                results[1][i] = duration.count();
-                break;
-            }
-            case 2: {  // can't sort a set, so set to -1
-                results[1][i] = -1;
-                break;
-            }
-        }
-    }
+
 
     // testing for INSERT operations
     for (int i = 0; i < STRUCTURES; i++) {
@@ -110,7 +85,7 @@ int main() {
             }
         }
     }
-    
+
   // Testing for DELETE operations
         for (int i = 0; i < STRUCTURES; i++) {
             // Select a target value in the vector 
