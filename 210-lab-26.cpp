@@ -51,30 +51,49 @@ int main() {
             results[0][i] = duration.count();
             fin.close();
         }
-
-
-
-    // testing for INSERT operations
-    for (int i = 0; i < STRUCTURES; i++) {
-        int ind_v = data_vector.size() / 2;
-        int ind_l = data_list.size() / 2;
-        auto start = chrono::high_resolution_clock::now();
-        switch(i) {
-            case 0: {  // insert into a vector
-                data_vector.insert(data_vector.begin() + ind_v, "TESTCODE");
-                auto end = chrono::high_resolution_clock::now();
-                auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
-                results[2][i] = duration.count();
-                break;
+        // Testing for SORT operations
+        for (int i = 0; i < STRUCTURES; i++) {
+            auto start = chrono::high_resolution_clock::now();
+            switch(i) {
+                case 0: {  // Sort a vector
+                    sort(data_vector.begin(), data_vector.end());
+                    break;
+                }
+                case 1: {  // Sort a list
+                    data_list.sort();
+                    break;
+                }
+                case 2: {  // Can't sort a set, so time is 0
+                    break;
+                }
             }
-            case 1: {  // insert into a list
-                auto it = data_list.begin();
-                advance(it, ind_l);
-                data_list.insert(it, "TESTCODE");
-                auto end = chrono::high_resolution_clock::now();
-                auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
-                results[2][i] = duration.count();
-                break;
+            auto end = chrono::high_resolution_clock::now();
+            long long duration = 0;
+            if (i != 2) // For vector and list, calculate duration
+                duration = chrono::duration_cast<chrono::microseconds>(end - start).count();
+            results[1][i] = duration;
+        }
+
+        // Testing for INSERT operations
+        for (int i = 0; i < STRUCTURES; i++) {
+            int ind_v = data_vector.size() / 2;
+            int ind_l = data_list.size() / 2;
+            auto start = chrono::high_resolution_clock::now();
+            switch(i) {
+                case 0: {  // Insert into a vector
+                    data_vector.insert(data_vector.begin() + ind_v, "TESTCODE");
+                    break;
+                }
+                case 1: {  // Insert into a list
+                    auto it = data_list.begin();
+                    advance(it, ind_l);
+                    data_list.insert(it, "TESTCODE");
+                    break;
+                }
+                case 2: {  // Insert into a set
+                    data_set.insert("TESTCODE");
+                    break;
+                }
             }
             case 2: {  // insert into a set
                 data_set.insert("TESTCODE");
