@@ -6,9 +6,10 @@
 #include <set>
 #include <list>
 #include <iomanip>
+
 using namespace std;
 
-// const int SZ = 20000, COLS = 3, ROWS = 4, TESTS = 4;
+const int NUM_RUNS = 15;
 const int STRUCTURES = 3;
 const int ROWS = 4, COLS = 3;
 const int W1 = 10;
