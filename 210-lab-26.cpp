@@ -110,57 +110,56 @@ int main() {
             }
         }
     }
+    
+  // Testing for DELETE operations
+        for (int i = 0; i < STRUCTURES; i++) {
+            // Select a target value in the vector 
+            int ind = data_vector.size() / 2;
+            string target_v = data_vector[ind];
 
-    // testing for DELETE operations
-    for (int i = 0; i < STRUCTURES; i++) {
-        // select a target value in the vector 
-        int ind = data_vector.size() / 2;
-        string target_v = data_vector[ind];
+            // Select a target value in the list
+            auto it1 = data_list.begin();
+            advance(it1, ind);
+            string target_l = *it1;
 
-        // select a target value in the list
-        auto it1 = data_list.begin();
-        advance(it1, ind);
-        string target_l = *it1;
-
-        // select a target value in the set
-        auto it2 = data_set.begin();
-        advance(it2, ind);
-        string target_s = *it2;
-        
-        auto start = chrono::high_resolution_clock::now();
-        switch(i) {
-            case 0: {  // delete by value from vector
-                data_vector.erase(remove(data_vector.begin(), data_vector.end(), target_v));
-                auto end = chrono::high_resolution_clock::now();
-                auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
-                results[3][i] = duration.count();
-                break;
+            // Select a target value in the set
+            auto it2 = data_set.begin();
+            advance(it2, ind);
+            string target_s = *it2;
+            
+            auto start = chrono::high_resolution_clock::now();
+            switch(i) {
+                case 0: {  // Delete by value from vector
+                    data_vector.erase(remove(data_vector.begin(), data_vector.end(), target_v), data_vector.end());
+                    break;
+                }
+                case 1: {  // Delete by value from list
+                    data_list.remove(target_l);
+                    break;
+                }
+                case 2: {  // Delete by value from set
+                    data_set.erase(target_s);
+                    break;
+                }
             }
-            case 1: {  // delete by value from list
-                data_list.remove(target_l);
-                auto end = chrono::high_resolution_clock::now();
-                auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
-                results[3][i] = duration.count();
-                break;
-            }
-            case 2: {  // delete by value from set
-                data_set.erase(target_s);    
-                auto end = chrono::high_resolution_clock::now();
-                auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
-                results[3][i] = duration.count();
-                break;
+            auto end = chrono::high_resolution_clock::now();
+            auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
+            results[3][i] = duration.count();
+        }
+
+        // Add results to cumulative results
+        for (int i = 0; i < ROWS; i++) {
+            for (int j = 0; j < COLS; j++) {
+                cum_results[i][j] += results[i][j];
             }
         }
     }
 
-    string labels[] = {"Read", "Sort", "Insert", "Delete"};
-    cout << setw(W1) << "Operation" << setw(W1) << "Vector" << setw(W1) << "List"
-         << setw(W1) << "Set" << endl;
-    for (int i = 0; i < 4; i++) {
-        cout << setw(W1) << labels[i];
-        for (int j = 0; j < COLS; j++) 
-            cout << setw(W1) << results[i][j];
-        cout << endl;
+    // Compute average results
+    for (int i = 0; i < ROWS; i++) {
+        for (int j = 0; j < COLS; j++) {
+            cum_results[i][j] /= NUM_RUNS;
+        }
     }
     
 
